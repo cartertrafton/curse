@@ -1,0 +1,38 @@
+Brandon Merluzzo
+
+Incremental Process Model - Curse
+
+1. Basic version 
+	- Database structure - only with student table
+	- Class structure - base class and student derived class with student fucntions
+	- Basic GUI
+	- Integrate and test database and class structures
+	- Test basic GUI with functions
+
+2. First Version
+	- Add instructor and admin tables to database 
+	- Add admin and instructor classes and functions
+	- Integrate new classes and datbase tables with basic GUI
+	- Test new classes and database tables connection
+	- Initial release to public
+	
+3. Second Version
+	- Gather public information for updates and bug fixing
+	- Add courses table to database and make connection between courses and instructor tables
+	- Develop official GUI
+	- Integrate and test with previous version
+	- Second release to public
+
+4. Third version
+	- Gather public information for updates and bug fixing
+	- Final verion of GUI development 
+	- Integrate and test final GUI version with previous version
+	- Third release to public
+
+5. Final Version
+	- Gather public information for updates and bug fixing 
+	- Finalize class structure, database, and functions
+	- Final release to public
+	- Keep updating if needed
+
+

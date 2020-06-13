@@ -1,0 +1,31 @@
+Brandon Merluzzo
+
+Waterfall Process Model - Curse
+
+1. Requirements 
+	- Database - entities and relations between tables
+	- Class structure - functions for each class
+	- User interface
+
+2. System and Software design 
+	- Separate into individual units
+	- Class structure into user, student, instructor, and admin
+	- Database separation into student, instructor, admin, and courses 
+	  tables with instructor and courses table connected
+	- Multiple menu interfaces for each set of class functions
+
+3. Implementation and unit testing 
+	- Code the software units and test individually 
+	- Test database with queries
+	- Test classes with hardcoded objects and calling of functions for each class
+	- Test GUI menu with basic fucntions
+
+4. Integration 
+	- Merge database, class, and GUI units
+	- Test for database and class connection
+	- Integrate and test the GUI with the class functions
+
+5. Operation and maintenance  
+	- Bug fix from overall integration
+	- Full release of teh software
+	- Push updates when needed
