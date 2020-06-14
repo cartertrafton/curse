@@ -11,11 +11,14 @@
 	* Test and validate functions
 	* QA test for bugs, errors, and outlier end-case results
 * Second release (v2)
+	* Gather public information for bug fixing/updates
+	* Begin GUI outline/development
   	* Database development
 	* Integrate of v1 functions with database
 	* Create regression test and tests for database component
 * Third release (v3)
-	* GUI outline and development
+	* Gather public information for bug fixing/updates
+	* Full GUI development
 	* Integrate v2 functions into GUI
 	* Test all GUI components
     
