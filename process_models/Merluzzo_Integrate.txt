@@ -20,6 +20,8 @@ Integrate and Configure Process Model - Curse
 
 5. Operation and Maintenance 
 	- Bug fix from overall integration
+	- Regression test final version
+	- Polish final version and add error reporting
 	- Full release of the software
 	- Push updates when needed
 	
