@@ -1,0 +1,28 @@
+Brandon Merluzzo
+
+Integrate and Configure Process Model - Curse
+
+1. Requirements 
+	- Database - research for existing libraries to help assist forming database
+	- Class structure
+	- GUI - research for existing libraries to help assist creating a user interface
+
+2. Development and Configure
+	- Develop database and configure with library researched (Ex: sqlite3, MySQL)
+	- Develop class structure - use database libraries to create class functions
+	- Develop GUI and configure with library researched (Ex: Pygame, Tkinter)
+
+3. Integration
+	- Test units individually
+	- Bug fix individual units 
+	- Integrate units 
+	- Test for unit connection between database, class, and GUI
+
+5. Operation and Maintenance 
+	- Bug fix from overall integration
+	- Regression test final version
+	- Polish final version and add error reporting
+	- Full release of the software
+	- Push updates when needed
+	
+
