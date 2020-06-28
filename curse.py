@@ -19,13 +19,15 @@ allTables = ["STUDENT", "INSTRUCTOR", "ADMIN", "COURSE"]
 ######################### functions
 # search all courses (no parameters)
 def searchAllCourses():
-    try:
-        cursor.execute("""SELECT * FROM COURSE""")
-        query_result = cursor.fetchall()
-        for i in query_result:
-            print(i)
-    except:
-        print("\nERROR... try again\n")
+    cursor.execute("""SELECT * FROM COURSE""")
+    query_result = cursor.fetchall()
+    print("===========================================")
+    print("ID, TITLE, CRN, DEPT, INSTRUCTORID, TIME, DAYS, SEMESTER, YEAR, CREDITS")
+    print("===========================================")
+    for i in query_result:
+        print(i)
+    print("===========================================")
+
     return
 
 # search all courses (with parameters)
@@ -69,8 +71,9 @@ def studentMenu():
 # instructor functions menu
 def instructorMenu():
     print("===========================================")
-    print(" [ 1 ] to Print Schedule/Roster")
-    print(" [ 2 ] to Search Courses")
+    print(" [ 1 ] to Print Teaching Schedule")
+    print(" [ 2 ] to Print Class Roster")
+    print(" [ 3 ] to Search Courses")
     print(" [ 0 ] to Log Out")
     print("===========================================")
     instructorSelect = int(input())
@@ -84,7 +87,7 @@ def adminMenu():
     print(" [ 2 ] to Remove Course from System")
     print(" [ 3 ] to Add/Remove Users")
     print(" [ 4 ] to Override Student In/Out of Course or Roster")
-    print(" [ 5 ] to Search/Print Schedule or Roster")
+    print(" [ 5 ] to Search Courses")
     print(" [ 0 ] to Log Out")
     print("===========================================")
     adminSelect = int(input())
@@ -104,6 +107,7 @@ def main():
 
         # STUDENT LOGIN
         elif select == 1:
+
             inputID = str(input("Enter Student ID #: "))
             cursor.execute("""SELECT COUNT(*) FROM STUDENT WHERE ID=""" + inputID)
             IDcount = str(cursor.fetchall())[2:-2].replace(",", "")
@@ -130,25 +134,36 @@ def main():
                 currentUser = Student(sName, sSurname, sID, sGradyear, sMajor, sEmail)
                 print("Welcome, " + currentUser.firstName.replace("'", "") + " " + currentUser.lastName.replace("'", ""))
 
-                studentSelect = studentMenu()
-                if studentSelect == 0:
-                    # log out
-                    print()
+                while(select != 0):
+                    studentSelect = studentMenu()
+                    if studentSelect == 0:
+                        print("Logging out...")
+                        break
 
-                elif studentSelect == 1:
-                    # search
-                    print()
+                    elif studentSelect == 1:
+                        # search
+                        print("===========================================")
+                        print(" [ 1 ] to Search All Courses")
+                        print(" [ 2 ] to Search Courses by Parameter")
+                        print("===========================================")
+                        searchSelect = int(input())
+                        if searchSelect == 1:
+                            searchAllCourses()
+                        elif searchSelect == 2:
+                            searchAllCoursesWithParam()
+                        else:
+                            print("Unrecognized choice...")
 
-                elif studentSelect == 2:
-                    # add/drop
-                    print()
+                    elif studentSelect == 2:
+                        # add/drop
+                        print()
 
-                elif studentSelect == 3:
-                    # print schedule
-                    print()
+                    elif studentSelect == 3:
+                        # print schedule
+                        print()
 
-                else:
-                    print("Unrecognized selection!")
+                    else:
+                        print("Unrecognized selection!")
             else:
                 print("\nERROR: ID# NOT FOUND OR DOES NOT MATCH LOGIN TYPE\n")
 
@@ -182,25 +197,37 @@ def main():
                 currentUser = Instructor(iName, iSurname, iID, iTitle, iHireYear, iDept, iEmail)
                 print("Welcome, " + currentUser.firstName.replace("'", "") + " " + currentUser.lastName.replace("'", ""))
 
-                instructorSelect = instructorMenu()
-                if instructorSelect == 0:
-                    # log out and exit
-                    print()
+                while (select != 0):
+                    instructorSelect = instructorMenu()
+                    if instructorSelect == 0:
+                        # log out
+                        print("Logging out...")
+                        break
 
-                elif instructorSelect == 1:
-                    # print schedule
-                    print()
+                    elif instructorSelect == 1:
+                        # print schedule
+                        print()
 
-                elif instructorSelect == 2:
-                    # print roster
-                    print()
+                    elif instructorSelect == 2:
+                        # print roster
+                        print()
 
-                elif instructorSelect == 3:
-                    # search courses
-                    print()
+                    elif instructorSelect == 3:
+                        # search
+                        print("===========================================")
+                        print(" [ 1 ] to Search All Courses")
+                        print(" [ 2 ] to Search Courses by Parameter")
+                        print("===========================================")
+                        searchSelect = int(input())
+                        if searchSelect == 1:
+                            searchAllCourses()
+                        elif searchSelect == 2:
+                            searchAllCoursesWithParam()
+                        else:
+                            print("Unrecognized choice...")
 
-                else:
-                    print("Unrecognized selection!")
+                    else:
+                        print("Unrecognized selection!")
             else:
                 print("\nERROR: ID# NOT FOUND OR DOES NOT MATCH LOGIN TYPE\n")
 
@@ -233,33 +260,49 @@ def main():
                 currentUser = Admin(aName, aSurname, aID, aTitle, aOffice, aEmail)
                 print("Welcome, " + currentUser.firstName.replace("'", "") + " " + currentUser.lastName.replace("'", ""))
 
-                adminSelect = adminMenu()
-                if adminSelect == 0:
-                    # log out and exit
-                    print(adminSelect)
+                while (select != 0):
+                    adminSelect = adminMenu()
+                    if adminSelect == 0:
+                        # log out
+                        print("Logging out...")
+                        break
 
-                elif adminSelect == 1:
-                    # add course
-                    print()
+                    if adminSelect == 0:
+                        # log out and exit
+                        print(adminSelect)
 
-                elif adminSelect == 2:
-                    # remove course
-                    print()
+                    elif adminSelect == 1:
+                        # add course
+                        print()
 
-                elif adminSelect == 3:
-                    # add/remove users
-                    print()
+                    elif adminSelect == 2:
+                        # remove course
+                        print()
 
-                elif adminSelect == 4:
-                    # override
-                    print()
+                    elif adminSelect == 3:
+                        # add/remove users
+                        print()
 
-                elif adminSelect == 5:
-                    # search/print schedule
-                    print()
+                    elif adminSelect == 4:
+                        # override
+                        print()
 
-                else:
-                    print("Unrecognized selection!")
+                    elif adminSelect == 5:
+                        # search
+                        print("===========================================")
+                        print(" [ 1 ] to Search All Courses")
+                        print(" [ 2 ] to Search Courses by Parameter")
+                        print("===========================================")
+                        searchSelect = int(input())
+                        if searchSelect == 1:
+                            searchAllCourses()
+                        elif searchSelect == 2:
+                            searchAllCoursesWithParam()
+                        else:
+                            print("Unrecognized choice...")
+
+                    else:
+                        print("Unrecognized selection!")
             else:
                 print("\nERROR: ID# NOT FOUND OR DOES NOT MATCH LOGIN TYPE\n")
 
