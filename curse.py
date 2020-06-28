@@ -106,11 +106,11 @@ def main():
         elif select == 1:
             inputID = str(input("Enter Student ID #: "))
             cursor.execute("""SELECT COUNT(*) FROM STUDENT WHERE ID=""" + inputID)
+            IDcount = str(cursor.fetchall())[2:-2].replace(",", "")
+            print("\nLogging in...")
 
-
-            if studentIDexists:
-                print(cursor.fetchall()[0])
-
+            if IDcount == "1":
+                print("Success!\n\n")
 
                 # gather data from database to create current user object
                 cursor.execute("""SELECT NAME FROM STUDENT WHERE ID=""" + inputID)
@@ -128,70 +128,155 @@ def main():
 
                 # create current user object
                 currentUser = Student(sName, sSurname, sID, sGradyear, sMajor, sEmail)
+                print("Welcome, " + currentUser.firstName.replace("'", "") + " " + currentUser.lastName.replace("'", ""))
 
                 studentSelect = studentMenu()
-                # if studentSelect == 0:
-                #
-                # elif studentSelect == 1:
-                #
-                # elif studentSelect == 2:
+                if studentSelect == 0:
+                    # log out
+                    print()
 
+                elif studentSelect == 1:
+                    # search
+                    print()
+
+                elif studentSelect == 2:
+                    # add/drop
+                    print()
+
+                elif studentSelect == 3:
+                    # print schedule
+                    print()
+
+                else:
+                    print("Unrecognized selection!")
             else:
                 print("\nERROR: ID# NOT FOUND OR DOES NOT MATCH LOGIN TYPE\n")
 
         # INSTRUCTOR LOGIN
         elif select == 2:
-            try:
+            inputID = str(input("Enter Employee ID #: "))
+            cursor.execute("""SELECT COUNT(*) FROM INSTRUCTOR WHERE ID=""" + inputID)
+            IDcount = str(cursor.fetchall())[2:-2].replace(",", "")
+            print("\nLogging in...")
+
+            if IDcount == "1":
+                print("Success!\n\n")
+
                 # gather data from database to create current user object
-                cursor.execute("""SELECT NAME FROM STUDENT WHERE ID=""" + inputID)
+                cursor.execute("""SELECT NAME FROM INSTRUCTOR WHERE ID=""" + inputID)
                 iName = str(cursor.fetchall())[2:-2].replace(",", "")
-                cursor.execute("""SELECT SURNAME FROM STUDENT WHERE ID=""" + inputID)
+                cursor.execute("""SELECT SURNAME FROM INSTRUCTOR WHERE ID=""" + inputID)
                 iSurname = str(cursor.fetchall())[2:-2].replace(",", "")
-                cursor.execute("""SELECT ID FROM STUDENT WHERE ID=""" + inputID)
+                cursor.execute("""SELECT ID FROM INSTRUCTOR WHERE ID=""" + inputID)
                 iID = str(cursor.fetchall())[2:-2].replace(",", "")
-
-
+                cursor.execute("""SELECT TITLE FROM INSTRUCTOR WHERE ID=""" + inputID)
+                iTitle = str(cursor.fetchall())[2:-2].replace(",", "")
+                cursor.execute("""SELECT HIREYEAR FROM INSTRUCTOR WHERE ID=""" + inputID)
+                iHireYear = str(cursor.fetchall())[2:-2].replace(",", "")
+                cursor.execute("""SELECT DEPT FROM INSTRUCTOR WHERE ID=""" + inputID)
+                iDept = str(cursor.fetchall())[2:-2].replace(",", "")
+                cursor.execute("""SELECT EMAIL FROM INSTRUCTOR WHERE ID=""" + inputID)
+                iEmail = str(cursor.fetchall())[2:-2].replace(",", "")
 
                 # create current user object
-                currentUser = Instructor(iName, iSurname, iID, sGradyear, sMajor, sEmail)
+                currentUser = Instructor(iName, iSurname, iID, iTitle, iHireYear, iDept, iEmail)
+                print("Welcome, " + currentUser.firstName.replace("'", "") + " " + currentUser.lastName.replace("'", ""))
 
                 instructorSelect = instructorMenu()
                 if instructorSelect == 0:
                     # log out and exit
+                    print()
+
                 elif instructorSelect == 1:
                     # print schedule
+                    print()
+
                 elif instructorSelect == 2:
                     # print roster
+                    print()
+
                 elif instructorSelect == 3:
                     # search courses
+                    print()
 
-            except:
+                else:
+                    print("Unrecognized selection!")
+            else:
                 print("\nERROR: ID# NOT FOUND OR DOES NOT MATCH LOGIN TYPE\n")
+
 
         # ADMIN FUNCTIONS
         elif select == 3:
+            inputID = str(input("Enter Employee ID #: "))
+            cursor.execute("""SELECT COUNT(*) FROM ADMIN WHERE ID=""" + inputID)
+            IDcount = str(cursor.fetchall())[2:-2].replace(",", "")
+            print("\nLogging in...")
 
-            adminSelect = adminMenu()
-            if adminSelect == 0:
-                # log out and exit
-            elif adminSelect == 1:
-                # add course
-            elif adminSelect == 2:
-                # remove course
-            elif adminSelect == 3:
-                # add/remove users
-            elif adminSelect == 4:
-                # override
-            elif adminSelect == 5:
-                # search/print schedule
+            if IDcount == "1":
+                print("Success!\n\n")
 
-        else:
-            print("Unrecognized selection!")
+                # gather data from database to create current user object
+                cursor.execute("""SELECT NAME FROM ADMIN WHERE ID=""" + inputID)
+                aName = str(cursor.fetchall())[2:-2].replace(",", "")
+                cursor.execute("""SELECT SURNAME FROM ADMIN WHERE ID=""" + inputID)
+                aSurname = str(cursor.fetchall())[2:-2].replace(",", "")
+                cursor.execute("""SELECT ID FROM ADMIN WHERE ID=""" + inputID)
+                aID = str(cursor.fetchall())[2:-2].replace(",", "")
+                cursor.execute("""SELECT TITLE FROM ADMIN WHERE ID=""" + inputID)
+                aTitle = str(cursor.fetchall())[2:-2].replace(",", "")
+                cursor.execute("""SELECT OFFICE FROM ADMIN WHERE ID=""" + inputID)
+                aOffice = str(cursor.fetchall())[2:-2].replace(",", "")
+                cursor.execute("""SELECT EMAIL FROM ADMIN WHERE ID=""" + inputID)
+                aEmail = str(cursor.fetchall())[2:-2].replace(",", "")
 
+                # create current user object
+                currentUser = Admin(aName, aSurname, aID, aTitle, aOffice, aEmail)
+                print("Welcome, " + currentUser.firstName.replace("'", "") + " " + currentUser.lastName.replace("'", ""))
+
+                adminSelect = adminMenu()
+                if adminSelect == 0:
+                    # log out and exit
+                    print(adminSelect)
+
+                elif adminSelect == 1:
+                    # add course
+                    print()
+
+                elif adminSelect == 2:
+                    # remove course
+                    print()
+
+                elif adminSelect == 3:
+                    # add/remove users
+                    print()
+
+                elif adminSelect == 4:
+                    # override
+                    print()
+
+                elif adminSelect == 5:
+                    # search/print schedule
+                    print()
+
+                else:
+                    print("Unrecognized selection!")
+            else:
+                print("\nERROR: ID# NOT FOUND OR DOES NOT MATCH LOGIN TYPE\n")
 
     return
 
 
 ######################### calling main
 if __name__=="__main__":
+    print("\n Welcome to......")
+    print("     . | '''.| '||'  '|' '||''|.    .|'''. | '||''''|   ")
+    print("    .|'     '   ||    |   ||   ||   ||..  '   ||  .     ")
+    print("    ||          ||    |   ||''|'     ''|||.   ||''|     ")
+    print("    '|.      .  ||    |   ||   |.  .     '||  ||        ")
+    print("     ''|....'    '|..'   .||.  '|' |'....|'  .||.....|  ")
+    print("------------------------------------------------------------------")
+    print("           Course User Registration System Emulator")
+    print("------------------------------------------------------------------")
+
+
     main()

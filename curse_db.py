@@ -13,7 +13,6 @@ cursor = database.cursor()
 
 allTables = ["STUDENT", "INSTRUCTOR", "ADMIN", "COURSE"]
 
-
 ###################################################################### create tables
 # Create STUDENT table in the database
 cursor.execute("""DROP TABLE IF EXISTS STUDENT;""")
@@ -49,16 +48,16 @@ EMAIL		text	NOT NULL);""")
 # Create COURSE table in the database
 cursor.execute("""DROP TABLE IF EXISTS COURSE;""")
 cursor.execute("""CREATE TABLE COURSE (
-	ID 				INT 	PRIMARY KEY 	NOT NULL,
-	TITLE			TEXT	NOT NULL,
-	CRN				INT 	NOT NULL,
-	DEPT			CHAR(4) NOT NULL,
-	INSTRUCTORID	INT 	FORIEGN KEY		NOT NULL,
-	TIME			INT		NOT NULL,
-	DAYS			TEXT	NOT NULL,
-	SEMESTER		TEXT	NOT NULL,
-	YEAR			INT		NOT NULL,
-	CREDITS			INT		NOT NULL);""")
+ID 				INT 	PRIMARY KEY 	NOT NULL,
+TITLE			TEXT	NOT NULL,
+CRN				INT 	NOT NULL,
+DEPT			CHAR(4) NOT NULL,
+INSTRUCTORID	INT 	FORIEGN KEY		NOT NULL,
+TIME			INT		NOT NULL,
+DAYS			TEXT	NOT NULL,
+SEMESTER		TEXT	NOT NULL,
+YEAR			INT		NOT NULL,
+CREDITS			INT		NOT NULL);""")
 
 ###################################################################### insert examples
 
@@ -89,12 +88,11 @@ cursor.execute("""INSERT INTO ADMIN VALUES(00030001, 'Barack', 'Obama', 'Preside
 cursor.execute("""INSERT INTO ADMIN VALUES(00030002, 'Malala', 'Yousafzai', 'Registrar', 'Wentworth 101', 'yousafzaim');""")
 
 # Course List
-cursor.execute( """INSERT INTO COURSE VALUES(00090000, "INTRO TO TIME TRAVEL", 48151, 'BSAS', 20003, 10, 'MWF', 'FALL', 2020, 3);""")
-cursor.execute( """INSERT INTO COURSE VALUES(00090001, "INTERMEDIATE WORMHOLES", 48152, 'BSME', 20006, 12, 'TR', 'FALL', 2020, 4);""")
-cursor.execute( """INSERT INTO COURSE VALUES(00090002, "THEORY OF EVERYTHING", 48153, 'BSCO', 20004, 14, 'MW', 'FALL', 2020, 4);""")
-cursor.execute( """INSERT INTO COURSE VALUES(00090003, "NU-CALCULUS", 48154, 'BSAS', 20003, 14, 'MTR', 'FALL', 2020, 4);""")
-cursor.execute( """INSERT INTO COURSE VALUES(00090004, "UFOLOGY: A DEEP DIVE", 48155, 'HUSS', 20002, 8, 'MW', 'FALL', 2020, 4);""")
-
+cursor.execute("""INSERT INTO COURSE VALUES(00090000, "INTRO TO TIME TRAVEL", 48151, 'BSAS', 20003, 10, 'MWF', 'FALL', 2020, 3);""")
+cursor.execute("""INSERT INTO COURSE VALUES(00090001, "INTERMEDIATE WORMHOLES", 48152, 'BSME', 20006, 12, 'TR', 'FALL', 2020, 4);""")
+cursor.execute("""INSERT INTO COURSE VALUES(00090002, "THEORY OF EVERYTHING", 48153, 'BSCO', 20004, 14, 'MW', 'FALL', 2020, 4);""")
+cursor.execute("""INSERT INTO COURSE VALUES(00090003, "NU-CALCULUS", 48154, 'BSAS', 20003, 14, 'MTR', 'FALL', 2020, 4);""")
+cursor.execute("""INSERT INTO COURSE VALUES(00090004, "UFOLOGY: A DEEP DIVE", 48155, 'HUSS', 20002, 8, 'MW', 'FALL', 2020, 4);""")
 
 # close the connection
 
