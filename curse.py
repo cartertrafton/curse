@@ -32,14 +32,23 @@ def searchAllCourses():
 
 # search all courses (with parameters)
 def searchAllCoursesWithParam():
-    command = ''
-    try:
-        cursor.execute(command)
-        query_result = cursor.fetchall()
-        for i in query_result:
-            print(i)
-    except:
-        print("\nERROR... try again\n")
+    # input search term
+    searchTerm = str(input("Enter a term to search by: "))
+
+    # check for match in ID, TITLE, CRN, DEPT, INSTRUCTORID, TIME, DAYS, SEMESTER, YEAR, CREDITS
+    command = "SELECT * FROM COURSE WHERE ID LIKE '%" + searchTerm + "%' or TITLE LIKE '%" + searchTerm + "%' or CRN LIKE '%" \
+              + searchTerm + "%' or DEPT LIKE '%" + searchTerm + "%' or INSTRUCTORID LIKE '%" + searchTerm + "%' or TIME LIKE '%" + searchTerm \
+              + " %' or DAYS LIKE '%" + searchTerm + "%' or SEMESTER LIKE '%" + searchTerm + "%' or YEAR LIKE '%" + searchTerm + "%' or CREDITS LIKE '%" + searchTerm + "%'"
+
+    cursor.execute(command)
+    query_result = cursor.fetchall()
+    print("===========================================")
+    print("ID, TITLE, CRN, DEPT, INSTRUCTORID, TIME, DAYS, SEMESTER, YEAR, CREDITS")
+    print("===========================================")
+    for i in query_result:
+        print(i)
+    print("===========================================")
+
     return
 
 
