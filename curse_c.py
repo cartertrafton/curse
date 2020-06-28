@@ -3,7 +3,7 @@
 # classes for CURSE project
 #####################################
 
-
+# User base class
 class User:
     # user attributes
     firstName = ""
@@ -25,7 +25,6 @@ class User:
 
 
 # Student:
-# 	can search courses, add/drop courses, print schedule.
 class Student(user):
     # constructor
     def __init__(self, f, l, i):
@@ -40,7 +39,6 @@ class Student(user):
 
 
 # Instructor:
-#	can print schedules/rosters, search courses.
 class Instructor(user):
     # constructor
     def __init__(self, f, l, i):
@@ -55,9 +53,6 @@ class Instructor(user):
 
 
 #  Admin:
-# 	can add courses to the system, remove courses from the system,
-#  	add/remove users, force student in or out of course/rosters,
-#  	search/print rosters/courses
 class Admin(user):
     # constructor
     def __init__(self, f, l, i):

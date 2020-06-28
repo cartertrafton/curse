@@ -7,6 +7,12 @@
 ######################### set up
 from curse_c import *
 
+# database set up
+import sqlite3
+
+db = sqlite3.connect("assignment7.db")
+cursor = db.cursor()
+allTables = ["STUDENT", "INSTRUCTOR", "ADMIN", "COURSE"]
 
 ######################### printing functions
 def mainMenu():
