@@ -14,6 +14,34 @@ db = sqlite3.connect("assignment7.db")
 cursor = db.cursor()
 allTables = ["STUDENT", "INSTRUCTOR", "ADMIN", "COURSE"]
 
+
+
+######################### functions
+# search all courses (no parameters)
+def searchAllCourses():
+    try:
+        cursor.execute("""SELECT * FROM COURSE""")
+        query_result = cursor.fetchall()
+        for i in query_result:
+            print(i)
+    except:
+        print("\nERROR... try again\n")
+    return
+
+# search all courses (with parameters)
+def searchAllCoursesWithParam():
+    command = ''
+    try:
+        cursor.execute(command)
+        query_result = cursor.fetchall()
+        for i in query_result:
+            print(i)
+    except:
+        print("\nERROR... try again\n")
+    return
+
+
+
 ######################### printing functions
 def mainMenu():
     print("===========================================")
@@ -74,19 +102,92 @@ def main():
             print("Exiting...")
             break
 
+        # STUDENT LOGIN
         elif select == 1:
-            studentSelect = studentMenu()
-            # student functions go here
+            inputID = str(input("Enter Student ID #: "))
+            cursor.execute("""SELECT COUNT(*) FROM STUDENT WHERE ID=""" + inputID)
 
+
+            if studentIDexists:
+                print(cursor.fetchall()[0])
+
+
+                # gather data from database to create current user object
+                cursor.execute("""SELECT NAME FROM STUDENT WHERE ID=""" + inputID)
+                sName = str(cursor.fetchall())[2:-2].replace(",", "")
+                cursor.execute("""SELECT SURNAME FROM STUDENT WHERE ID=""" + inputID)
+                sSurname = str(cursor.fetchall())[2:-2].replace(",", "")
+                cursor.execute("""SELECT ID FROM STUDENT WHERE ID=""" + inputID)
+                sID = str(cursor.fetchall())[2:-2].replace(",", "")
+                cursor.execute("""SELECT GRADYEAR FROM STUDENT WHERE ID=""" + inputID)
+                sGradyear = str(cursor.fetchall())[2:-2].replace(",", "")
+                cursor.execute("""SELECT MAJOR FROM STUDENT WHERE ID=""" + inputID)
+                sMajor = str(cursor.fetchall())[2:-2].replace(",", "")
+                cursor.execute("""SELECT EMAIL FROM STUDENT WHERE ID=""" + inputID)
+                sEmail = str(cursor.fetchall())[2:-2].replace(",", "")
+
+                # create current user object
+                currentUser = Student(sName, sSurname, sID, sGradyear, sMajor, sEmail)
+
+                studentSelect = studentMenu()
+                # if studentSelect == 0:
+                #
+                # elif studentSelect == 1:
+                #
+                # elif studentSelect == 2:
+
+            else:
+                print("\nERROR: ID# NOT FOUND OR DOES NOT MATCH LOGIN TYPE\n")
+
+        # INSTRUCTOR LOGIN
         elif select == 2:
-            instructorSelect = instructorMenu()
-            # instructor functions go here
+            try:
+                # gather data from database to create current user object
+                cursor.execute("""SELECT NAME FROM STUDENT WHERE ID=""" + inputID)
+                iName = str(cursor.fetchall())[2:-2].replace(",", "")
+                cursor.execute("""SELECT SURNAME FROM STUDENT WHERE ID=""" + inputID)
+                iSurname = str(cursor.fetchall())[2:-2].replace(",", "")
+                cursor.execute("""SELECT ID FROM STUDENT WHERE ID=""" + inputID)
+                iID = str(cursor.fetchall())[2:-2].replace(",", "")
 
+
+
+                # create current user object
+                currentUser = Instructor(iName, iSurname, iID, sGradyear, sMajor, sEmail)
+
+                instructorSelect = instructorMenu()
+                if instructorSelect == 0:
+                    # log out and exit
+                elif instructorSelect == 1:
+                    # print schedule
+                elif instructorSelect == 2:
+                    # print roster
+                elif instructorSelect == 3:
+                    # search courses
+
+            except:
+                print("\nERROR: ID# NOT FOUND OR DOES NOT MATCH LOGIN TYPE\n")
+
+        # ADMIN FUNCTIONS
         elif select == 3:
+
             adminSelect = adminMenu()
-            # admin functions go here
+            if adminSelect == 0:
+                # log out and exit
+            elif adminSelect == 1:
+                # add course
+            elif adminSelect == 2:
+                # remove course
+            elif adminSelect == 3:
+                # add/remove users
+            elif adminSelect == 4:
+                # override
+            elif adminSelect == 5:
+                # search/print schedule
+
         else:
             print("Unrecognized selection!")
+
 
     return
 

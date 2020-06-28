@@ -11,6 +11,9 @@ database = sqlite3.connect("assignment7.db")
 # cursor objects are used to traverse, search, grab, etc. information from the database, similar to indices or pointers
 cursor = database.cursor()
 
+allTables = ["STUDENT", "INSTRUCTOR", "ADMIN", "COURSE"]
+
+
 ###################################################################### create tables
 # Create STUDENT table in the database
 cursor.execute("""DROP TABLE IF EXISTS STUDENT;""")
@@ -91,3 +94,9 @@ cursor.execute( """INSERT INTO COURSE VALUES(00090001, "INTERMEDIATE WORMHOLES",
 cursor.execute( """INSERT INTO COURSE VALUES(00090002, "THEORY OF EVERYTHING", 48153, 'BSCO', 20004, 14, 'MW', 'FALL', 2020, 4);""")
 cursor.execute( """INSERT INTO COURSE VALUES(00090003, "NU-CALCULUS", 48154, 'BSAS', 20003, 14, 'MTR', 'FALL', 2020, 4);""")
 cursor.execute( """INSERT INTO COURSE VALUES(00090004, "UFOLOGY: A DEEP DIVE", 48155, 'HUSS', 20002, 8, 'MW', 'FALL', 2020, 4);""")
+
+
+# close the connection
+
+database.commit()
+database.close()
