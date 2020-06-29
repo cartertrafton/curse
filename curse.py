@@ -51,8 +51,74 @@ def searchAllCoursesWithParam():
 
     return
 
+#add/drop courses from schedule
+def add_drop():
+    schedule = [] 
+    s = str(input("Enter Semester (FALL, SPRING, OR SUMMER):"))
+    print("===========================================")
+    print("Courses Offered:")
+    cursor.execute("""SELECT * FROM COURSE WHERE SEMESTER = '%s'""" % (s))
+    query_result = cursor.fetchall()
+  
+    for i in query_result:
+        print(i)      
+    i = 0
+    while i == 0:
+        print("===========================================")
+        temp = input("Enter 1 to Add a Course, 2 to Remove Course, and 0 to Exit:")
+        if(temp == '1'):
+            print("===========================================")
+            crn = input("Enter CRN to add course:")
+            cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (crn))
+            query_result = cursor.fetchall()
+            for i in query_result:
+                schedule.append(i)
+            i = 0
+        if(temp == '2'):
+            print("===========================================")
+            print("Student Schedule:")
+            print(schedule)
+            print("===========================================")
+            crn = input("Enter CRN to drop course:")
+            cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (crn))
+            query_result = cursor.fetchall()
+            for i in query_result:
+                schedule.remove(i)
+                print("===========================================")
+                print("Updated Student Schedule:")
+                print(schedule)
+            i = 0
+        if(temp == '0'):
+            i = 1
+    return   
 
+#add course to system
+def add_course():
+        print("Enter Course Information")
+        CRN = input("CRN of Course:")
+        Id = input("Id of Course:")
+        In_Id = input("ID of Instructor for Course:")
+        title = input("Course Title:")
+        dept = input("Course Department:")
+        time = input("Course Time:")
+        days = input("Course Days:") 
+        semester = input("Course Semester:")
+        year = input("Course Year:")
+        credit = input("Amount of credits:")
+        print("===========================================")
+        print("Course Added")
 
+        cursor.execute("""INSERT INTO COURSE VALUES('%s', '%s', '%s', '%s', '%s', '%s');""" % (Id, title, CRN, dept, In_Id, time, days, semester, year, credit))
+
+#remove course from system        
+def remove_course():
+    temp = input("Enter CRN to remove course:")
+    cursor.execute("""DELETE FROM COURSE WHERE CRN = '%s';""" % (temp))
+    print("===========================================")
+    print("Course removed")
+        
+        
+        
 ######################### printing functions
 def mainMenu():
     print("===========================================")
