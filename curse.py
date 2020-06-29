@@ -116,6 +116,26 @@ def remove_course():
     cursor.execute("""DELETE FROM COURSE WHERE CRN = '%s';""" % (temp))
     print("===========================================")
     print("Course removed")
+    
+#print roster
+def print_roster(schedule):
+    s = str(input("Enter Semester (FALL, SPRING, OR SUMMER):"))
+    print("===========================================")
+    print("Courses this semester:")
+    cursor.execute("""SELECT * FROM COURSE WHERE SEMESTER = '%s'""" % (s))
+    query_result = cursor.fetchall()
+  
+    for i in query_result:
+        print(i)      
+    print("===========================================")
+    temp = input("Enter Course Id to print roster:")
+    cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (temp))
+    query_result = cursor.fetchall()
+    out = any(check in schedule for check in query_result) 
+    if out: 
+        print("True")  
+    else : 
+        print("False") 
         
         
         
