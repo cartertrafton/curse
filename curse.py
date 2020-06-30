@@ -52,7 +52,7 @@ def searchAllCoursesWithParam():
     return
 
 #add/drop courses from schedule
-def add_drop():
+def student_add_drop():
     schedule = [] 
     s = str(input("Enter Semester (FALL, SPRING, OR SUMMER):"))
     print("===========================================")
@@ -93,25 +93,25 @@ def add_drop():
     return   
 
 #add course to system
-def add_course():
+def admin_add_course():
         print("Enter Course Information")
-        CRN = input("CRN of Course:")
-        Id = input("Id of Course:")
-        In_Id = input("ID of Instructor for Course:")
-        title = input("Course Title:")
-        dept = input("Course Department:")
-        time = input("Course Time:")
-        days = input("Course Days:") 
-        semester = input("Course Semester:")
-        year = input("Course Year:")
-        credit = input("Amount of credits:")
+        CRN = str(input("CRN of Course:"))
+        Id = str(input("Id of Course:"))
+        In_Id = str(input("ID of Instructor for Course:"))
+        title = str(input("Course Title:"))
+        dept = str(input("Course Department:"))
+        time = str(input("Course Time:"))
+        days = str(input("Course Days:"))
+        semester = str(input("Course Semester:"))
+        year = str(input("Course Year:"))
+        credit = str(input("Amount of credits:"))
         print("===========================================")
         print("Course Added")
 
         cursor.execute("""INSERT INTO COURSE VALUES('%s', '%s', '%s', '%s', '%s', '%s');""" % (Id, title, CRN, dept, In_Id, time, days, semester, year, credit))
 
 #remove course from system        
-def remove_course():
+def admin_remove_course():
     temp = input("Enter CRN to remove course:")
     cursor.execute("""DELETE FROM COURSE WHERE CRN = '%s';""" % (temp))
     print("===========================================")
@@ -264,6 +264,7 @@ def main():
 
                     elif studentSelect == 2:
                         # add/drop
+                        student_add_drop()
                         print()
 
                     elif studentSelect == 3:
@@ -390,16 +391,14 @@ def main():
                         print("Logging out...")
                         break
 
-                    if adminSelect == 0:
-                        # log out and exit
-                        print(adminSelect)
-
                     elif adminSelect == 1:
                         # add course
+                        admin_add_course()
                         print()
 
                     elif adminSelect == 2:
                         # remove course
+                        admin_remove_course()
                         print()
 
                     elif adminSelect == 3:
