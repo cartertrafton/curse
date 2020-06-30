@@ -15,7 +15,6 @@ cursor = db.cursor()
 allTables = ["STUDENT", "INSTRUCTOR", "ADMIN", "COURSE"]
 
 
-
 ######################### functions
 # search all courses (no parameters)
 def searchAllCourses():
@@ -29,6 +28,7 @@ def searchAllCourses():
     print("===========================================")
 
     return
+
 
 # search all courses (with parameters)
 def searchAllCoursesWithParam():
@@ -48,51 +48,69 @@ def searchAllCoursesWithParam():
     for i in query_result:
         print(i)
     print("===========================================")
-
     return
 
-#add/drop courses from schedule
-def student_add_drop():
-    schedule = [] 
+
+# search courses
+def searchCoursesMenu():
+    # search
+    print("===========================================")
+    print(" [ 1 ] to Search All Courses")
+    print(" [ 2 ] to Search Courses by Parameter")
+    print("===========================================")
+    searchSelect = int(input())
+    if searchSelect == 1:
+        searchAllCourses()
+    elif searchSelect == 2:
+        searchAllCoursesWithParam()
+    else:
+        print("Unrecognized choice...")
+    return
+
+
+# add/drop courses from schedule
+def student_add_drop(currentUser):
     s = str(input("Enter Semester (FALL, SPRING, OR SUMMER):"))
     print("===========================================")
     print("Courses Offered:")
     cursor.execute("""SELECT * FROM COURSE WHERE SEMESTER = '%s'""" % (s))
     query_result = cursor.fetchall()
-  
     for i in query_result:
         print(i)      
+
     i = 0
     while i == 0:
         print("===========================================")
         temp = input("Enter 1 to Add a Course, 2 to Remove Course, and 0 to Exit:")
         if(temp == '1'):
             print("===========================================")
+            print("Student Schedule:")
+            currentUser.print_schedule()
+            print("===========================================")
             crn = input("Enter CRN to add course:")
-            cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (crn))
-            query_result = cursor.fetchall()
-            for i in query_result:
-                schedule.append(i)
+            currentUser.add_course(crn)
+            print("===========================================")
+            print("Updated Student Schedule:")
+            currentUser.print_schedule()
             i = 0
+
         if(temp == '2'):
             print("===========================================")
             print("Student Schedule:")
-            print(schedule)
+            currentUser.print_schedule()
             print("===========================================")
             crn = input("Enter CRN to drop course:")
-            cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (crn))
-            query_result = cursor.fetchall()
-            for i in query_result:
-                schedule.remove(i)
-                print("===========================================")
-                print("Updated Student Schedule:")
-                print(schedule)
+            currentUser.remove_course(crn)
+            print("===========================================")
+            print("Updated Student Schedule:")
+            currentUser.print_schedule()
             i = 0
         if(temp == '0'):
             i = 1
     return   
 
-#add course to system
+
+# add course to system
 def admin_add_course():
         print("Enter Course Information")
         CRN = str(input("CRN of Course:"))
@@ -108,17 +126,19 @@ def admin_add_course():
         print("===========================================")
         print("Course Added")
 
-        cursor.execute("""INSERT INTO COURSE VALUES('%s', '%s', '%s', '%s', '%s', '%s');""" % (Id, title, CRN, dept, In_Id, time, days, semester, year, credit))
+        cursor.execute("""INSERT INTO COURSE VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');""" % (Id, title, CRN, dept, In_Id, time, days, semester, year, credit))
+        return
 
-#remove course from system        
+# remove course from system
 def admin_remove_course():
     temp = input("Enter CRN to remove course:")
     cursor.execute("""DELETE FROM COURSE WHERE CRN = '%s';""" % (temp))
     print("===========================================")
     print("Course removed")
-    
-#print roster
-def print_roster(schedule):
+    return
+
+# print roster
+def instructor_print_roster(instructorID):
     s = str(input("Enter Semester (FALL, SPRING, OR SUMMER):"))
     print("===========================================")
     print("Courses this semester:")
@@ -136,9 +156,9 @@ def print_roster(schedule):
         print("True")  
     else : 
         print("False") 
-        
-        
-        
+    return
+
+
 ######################### printing functions
 def mainMenu():
     print("===========================================")
@@ -188,13 +208,30 @@ def adminMenu():
     adminSelect = int(input())
     return adminSelect
 
+
 ######################### main loop
 def main():
+    # create example students and fill their schedules
+    student1 = Student("John", "Locke", 10012, 1960, "BSEE", "lockej")
+    student1.set_schedule(48155, 48152, 48151)
+
+    student2 = Student("Ada", "Lovelace", 10010, 1832, "BCOS", "lovelacea")
+    student2.set_schedule(48155, 48153, 48151)
+
+    student3 = Student("Scott", "Pilgrim", 10011, 1980, "BSCO", "pilgrims")
+    student3.set_schedule(48155, 48152, 48153)
+
+
+    # add example students to a list
+    student_list = [student1, student2, student3]
+
     active = 1
 
     while active == 1:
+        # prompt user for log in input
         select = mainMenu()
 
+        # exit program
         if select == 0:
             active = 0
             print("Exiting...")
@@ -208,6 +245,7 @@ def main():
             IDcount = str(cursor.fetchall())[2:-2].replace(",", "")
             print("\nLogging in...")
 
+            # if student ID exists in table, create student object with info from db
             if IDcount == "1":
                 print("Success!\n\n")
 
@@ -230,34 +268,21 @@ def main():
                 print("Welcome, " + currentUser.firstName.replace("'", "") + " " + currentUser.lastName.replace("'", ""))
 
                 while(select != 0):
+                    # prompt student for menu
                     studentSelect = studentMenu()
                     if studentSelect == 0:
                         print("Logging out...")
                         break
-
                     elif studentSelect == 1:
                         # search
-                        print("===========================================")
-                        print(" [ 1 ] to Search All Courses")
-                        print(" [ 2 ] to Search Courses by Parameter")
-                        print("===========================================")
-                        searchSelect = int(input())
-                        if searchSelect == 1:
-                            searchAllCourses()
-                        elif searchSelect == 2:
-                            searchAllCoursesWithParam()
-                        else:
-                            print("Unrecognized choice...")
-
+                        searchCoursesMenu()
                     elif studentSelect == 2:
                         # add/drop
-                        student_add_drop()
+                        student_add_drop(currentUser)
                         print()
-
                     elif studentSelect == 3:
                         # print schedule
-                        print()
-
+                        currentUser.print_schedule()
                     else:
                         print("Unrecognized selection!")
             else:
@@ -270,6 +295,7 @@ def main():
             IDcount = str(cursor.fetchall())[2:-2].replace(",", "")
             print("\nLogging in...")
 
+            # if employee ID exists in table, create instructor object with info from db
             if IDcount == "1":
                 print("Success!\n\n")
 
@@ -299,29 +325,15 @@ def main():
                         # log out
                         print("Logging out...")
                         break
-
                     elif instructorSelect == 1:
                         # print schedule
                         print()
-
                     elif instructorSelect == 2:
                         # print roster
-                        print()
-
+                        instructor_print_roster(iID)
                     elif instructorSelect == 3:
                         # search
-                        print("===========================================")
-                        print(" [ 1 ] to Search All Courses")
-                        print(" [ 2 ] to Search Courses by Parameter")
-                        print("===========================================")
-                        searchSelect = int(input())
-                        if searchSelect == 1:
-                            searchAllCourses()
-                        elif searchSelect == 2:
-                            searchAllCoursesWithParam()
-                        else:
-                            print("Unrecognized choice...")
-
+                        searchCoursesMenu()
                     else:
                         print("Unrecognized selection!")
             else:
@@ -335,6 +347,7 @@ def main():
             IDcount = str(cursor.fetchall())[2:-2].replace(",", "")
             print("\nLogging in...")
 
+            # if employee ID exists in table, create admin object with info from db
             if IDcount == "1":
                 print("Success!\n\n")
 
@@ -362,39 +375,23 @@ def main():
                         # log out
                         print("Logging out...")
                         break
-
                     elif adminSelect == 1:
                         # add course
                         admin_add_course()
                         print()
-
                     elif adminSelect == 2:
                         # remove course
                         admin_remove_course()
                         print()
-
                     elif adminSelect == 3:
                         # add/remove users
                         print()
-
                     elif adminSelect == 4:
                         # override
                         print()
-
                     elif adminSelect == 5:
                         # search
-                        print("===========================================")
-                        print(" [ 1 ] to Search All Courses")
-                        print(" [ 2 ] to Search Courses by Parameter")
-                        print("===========================================")
-                        searchSelect = int(input())
-                        if searchSelect == 1:
-                            searchAllCourses()
-                        elif searchSelect == 2:
-                            searchAllCoursesWithParam()
-                        else:
-                            print("Unrecognized choice...")
-
+                        searchCoursesMenu()
                     else:
                         print("Unrecognized selection!")
             else:
