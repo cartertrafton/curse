@@ -118,24 +118,20 @@ def remove_course():
     print("Course removed")
     
 #print roster
-def print_roster(schedule):
-    s = str(input("Enter Semester (FALL, SPRING, OR SUMMER):"))
-    print("===========================================")
-    print("Courses this semester:")
-    cursor.execute("""SELECT * FROM COURSE WHERE SEMESTER = '%s'""" % (s))
-    query_result = cursor.fetchall()
-  
-    for i in query_result:
-        print(i)      
-    print("===========================================")
-    temp = input("Enter Course Id to print roster:")
-    cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (temp))
+def print_roster(schedule, St_ID, C_ID):
+    
+    cursor.execute("""SELECT * FROM COURSE WHERE ID = '%s'""" % (C_ID))
     query_result = cursor.fetchall()
     out = any(check in schedule for check in query_result) 
     if out: 
-        print("True")  
-    else : 
-        print("False") 
+         cursor.execute("""SELECT SURNAME, NAME FROM STUDENT WHERE ID = '%s'""" % (St_ID))
+         query_result = cursor.fetchall()
+         for i in query_result:
+               print(i)
+         return
+    else: 
+    
+        return  
         
         
         
@@ -190,6 +186,23 @@ def adminMenu():
 
 ######################### main loop
 def main():
+
+    s1 = Student('Isaac', 'Newton', 10001, 1668, 'BSAS', 'newtoni')
+    schedule1 = s1.set_schedule('48151', '48152', '48153')
+    s2 = Student('Marie', 'Curie', 10002, 1903, 'BSAS', 'curiem')
+    schedule2 = s2.set_schedule('48151', '48154', '48155')
+    s3 = Student('Nikola', 'Tesla', 10003, 1878, 'BSEE', 'teslan')
+    schedule3 = s3.set_schedule('48152', '48154', '48155')
+    s4 = Student('Thomas', 'Edison', 10004, 1879, 'BSEE', 'notcool')
+    schedule4 = s4.set_schedule('48152', '48153', '48154')
+    s5 = Student('Grace', 'Hopper', 10006, 1928, 'BCOS', 'hopperg')
+    schedule5 = s5.set_schedule('48151', '48152', '48153')
+    student1 = s1.get_ID()
+    student2 = s2.get_ID()
+    student3 = s3.get_ID()
+    student4 = s4.get_ID()
+    student5 = s5.get_ID()
+    
     active = 1
 
     while active == 1:
@@ -304,8 +317,23 @@ def main():
                         print()
 
                     elif instructorSelect == 2:
-                        # print roster
-                        print()
+                        print("===========================================")
+                        print("Your Courses:")
+                        cursor.execute("""SELECT * FROM COURSE WHERE INSTRUCTORID = '%s'""" % (iID))
+                        query_result = cursor.fetchall()
+  
+                        for i in query_result:
+                                    print(i)  
+                                    
+                        print("===========================================")
+                        temp = input("Enter Course Id to print roster:")
+                        print("===========================================")
+                        print("Roster:")
+                        print_roster(schedule1, student1, temp)
+                        print_roster(schedule2, student2, temp)
+                        print_roster(schedule3, student3, temp)
+                        print_roster(schedule4, student4, temp)
+                        print_roster(schedule5, student5, temp)                      
 
                     elif instructorSelect == 3:
                         # search
