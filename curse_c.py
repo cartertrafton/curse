@@ -45,6 +45,24 @@ class Student(User):
     def __repr__(self):
         return str('Name: ' + self.firstName + ', ' + self.lastName + '.    ID: ' + str(self.ID))
 
+    def get_ID(self):
+        return self.ID
+
+    def set_schedule(self, x, y, z):
+        schedule = []
+        cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (x))
+        query_result = cursor.fetchall()
+        for i in query_result:
+            schedule.append(i)
+        cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (y))
+        query_result = cursor.fetchall()
+        for i in query_result:
+            schedule.append(i)        
+        cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (z))
+        query_result = cursor.fetchall()
+        for i in query_result:
+            schedule.append(i)    
+            return schedule     
 
 # Instructor:
 class Instructor(User):
