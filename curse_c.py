@@ -36,6 +36,7 @@ class Student(User):
     major = ""
     email = ""
     schedule = []
+    instructors = []
 
     # constructor
     def __init__(self, f, l, i, g, m, e):
@@ -44,20 +45,18 @@ class Student(User):
         self.major = m
         self.email = e
         self.schedule = []
+        self.instructors = []
 
 
     # printing method using __str__ and __repr__
     def __str__(self):
         return str('Name: ' + self.firstName + ', ' + self.lastName + '.    ID: ' + str(self.ID))
 
-
     def __repr__(self):
         return str('Name: ' + self.firstName + ', ' + self.lastName + '.    ID: ' + str(self.ID))
 
-
     def get_ID(self):
         return self.ID
-
 
     def add_course(self, crn):
         cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (crn))
@@ -66,27 +65,25 @@ class Student(User):
             self.schedule.append(i)
         return
 
-
     def remove_course(self, crn):
-        cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (crn))
-        query_result = cursor.fetchall()
-        for i in query_result:
-            for c in self.schedule:
-                if(i == c):
-                    print("removing " + str(i))
-                    self.schedule.remove(c)
+        for c in self.schedule:
+            if(c == crn):
+                self.schedule.remove(c)
         return
 
-
-    def set_schedule(self, x, y, z):
+    def set_schedule(self, x, y, z,):
         self.add_course(x)
         self.add_course(y)
         self.add_course(z)
         return
 
     def print_schedule(self):
+        print("ID, TITLE, CRN, DEPT, INSTRUCTORID, TIME, DAYS, SEMESTER, YEAR, CREDITS")
         for i in self.schedule:
-            print(i)
+            cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (i))
+            query_result = cursor.fetchall()
+            for x in query_result:
+                print(str(x))
         return
 
 
@@ -97,6 +94,7 @@ class Instructor(User):
     hireYear = 0
     dept = ""
     email = ""
+    courses = []
 
     # constructor
     def __init__(self, f, l, i, t, hy, d, e):
@@ -106,12 +104,24 @@ class Instructor(User):
         self.dept = d
         self.email = e
 
+        cursor.execute("""SELECT CRN FROM COURSE WHERE INSTRUCTORID = '%s'""" % (i))
+        query_result = cursor.fetchall()
+        for n in query_result:
+            self.courses.append(n)
+
     # printing method using __str__ and __repr__
     def __str__(self):
         return str('Name: ' + self.firstName + ', ' + self.lastName + '.    ID: ' + str(self.ID))
 
     def __repr__(self):
         return str('Name: ' + self.firstName + ', ' + self.lastName + '.    ID: ' + str(self.ID))
+
+    def print_schdule(self):
+        cursor.execute("""SELECT * FROM COURSE WHERE INSTRUCTORID = '%s'""" % (self.ID))
+        query_result = cursor.fetchall()
+        for i in query_result:
+            print(i)
+        return
 
 
 #  Admin:
@@ -134,6 +144,4 @@ class Admin(User):
 
     def __repr__(self):
         return str('Name: ' + self.firstName + ', ' + self.lastName + '.    ID: ' + str(self.ID))
-
-
 

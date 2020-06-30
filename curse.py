@@ -73,6 +73,8 @@ def student_add_drop(currentUser):
     s = str(input("Enter Semester (FALL, SPRING, OR SUMMER):"))
     print("===========================================")
     print("Courses Offered:")
+    print("ID, TITLE, CRN, DEPT, INSTRUCTORID, TIME, DAYS, SEMESTER, YEAR, CREDITS")
+    print("===========================================")
     cursor.execute("""SELECT * FROM COURSE WHERE SEMESTER = '%s'""" % (s))
     query_result = cursor.fetchall()
     for i in query_result:
@@ -112,22 +114,21 @@ def student_add_drop(currentUser):
 
 # add course to system
 def admin_add_course():
-        print("Enter Course Information")
-        CRN = str(input("CRN of Course:"))
-        Id = str(input("Id of Course:"))
-        In_Id = str(input("ID of Instructor for Course:"))
-        title = str(input("Course Title:"))
-        dept = str(input("Course Department:"))
-        time = str(input("Course Time:"))
-        days = str(input("Course Days:"))
-        semester = str(input("Course Semester:"))
-        year = str(input("Course Year:"))
-        credit = str(input("Amount of credits:"))
-        print("===========================================")
-        print("Course Added")
-
-        cursor.execute("""INSERT INTO COURSE VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');""" % (Id, title, CRN, dept, In_Id, time, days, semester, year, credit))
-        return
+    print("Enter Course Information")
+    CRN = str(input("CRN of Course:"))
+    Id = str(input("ID of Course:"))
+    In_Id = str(input("ID of Instructor for Course:"))
+    title = str(input("Course Title:"))
+    dept = str(input("Course Department:"))
+    time = str(input("Course Time:"))
+    days = str(input("Course Days:"))
+    semester = str(input("Course Semester:"))
+    year = str(input("Course Year:"))
+    credit = str(input("Amount of credits:"))
+    print("===========================================")
+    print("Course Added")
+    cursor.execute("""INSERT INTO COURSE VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');""" % (Id, title, CRN, dept, In_Id, time, days, semester, year, credit))
+    return
 
 # remove course from system
 def admin_remove_course():
@@ -138,24 +139,34 @@ def admin_remove_course():
     return
 
 # print roster
-def instructor_print_roster(instructorID):
-    s = str(input("Enter Semester (FALL, SPRING, OR SUMMER):"))
+def instructor_print_roster(user, student_list):
     print("===========================================")
-    print("Courses this semester:")
-    cursor.execute("""SELECT * FROM COURSE WHERE SEMESTER = '%s'""" % (s))
-    query_result = cursor.fetchall()
-  
-    for i in query_result:
-        print(i)      
+    print("Students in classes taught by: " + user.firstName.replace("'", "") + " " + user.lastName.replace("'", ""))
     print("===========================================")
-    temp = input("Enter Course Id to print roster:")
-    cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (temp))
-    query_result = cursor.fetchall()
-    out = any(check in schedule for check in query_result) 
-    if out: 
-        print("True")  
-    else : 
-        print("False") 
+    for s in student_list:
+        for x in s.instructors:
+            if str(user.ID) == str(x):
+                print(s)
+
+    # s = str(input("Enter Semester (FALL, SPRING, OR SUMMER):"))
+    # print("===========================================")
+    # print("Courses this semester:")
+    # print("ID, TITLE, CRN, DEPT, INSTRUCTORID, TIME, DAYS, SEMESTER, YEAR, CREDITS")
+    # print("===========================================")
+    # cursor.execute("""SELECT * FROM COURSE WHERE SEMESTER = '%s'""" % (s))
+    # query_result = cursor.fetchall()
+    # for i in query_result:
+    #     print(i)
+    # print("===========================================")
+    # temp = input("Enter CRN to print class roster:")
+    # cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (temp))
+    # query_result = cursor.fetchall()
+    # out = any(check in schedule for check in query_result)
+    # if out:
+    #     print("True")
+    # else :
+    #     print("False")
+
     return
 
 
@@ -214,12 +225,15 @@ def main():
     # create example students and fill their schedules
     student1 = Student("John", "Locke", 10012, 1960, "BSEE", "lockej")
     student1.set_schedule(48155, 48152, 48151)
+    student1.instructors = [20002, 20006, 20003]
 
     student2 = Student("Ada", "Lovelace", 10010, 1832, "BCOS", "lovelacea")
     student2.set_schedule(48155, 48153, 48151)
+    student2.instructors = [20002, 20004,  20003]
 
     student3 = Student("Scott", "Pilgrim", 10011, 1980, "BSCO", "pilgrims")
     student3.set_schedule(48155, 48152, 48153)
+    student3.instructors = [20002, 20006, 20004]
 
 
     # add example students to a list
@@ -327,10 +341,11 @@ def main():
                         break
                     elif instructorSelect == 1:
                         # print schedule
+                        currentUser.print_schdule()
                         print()
                     elif instructorSelect == 2:
                         # print roster
-                        instructor_print_roster(iID)
+                        instructor_print_roster(currentUser, student_list)
                     elif instructorSelect == 3:
                         # search
                         searchCoursesMenu()
@@ -340,7 +355,7 @@ def main():
                 print("\nERROR: ID# NOT FOUND OR DOES NOT MATCH LOGIN TYPE\n")
 
 
-        # ADMIN FUNCTIONS
+        # ADMIN LOGIN
         elif select == 3:
             inputID = str(input("Enter Employee ID #: "))
             cursor.execute("""SELECT COUNT(*) FROM ADMIN WHERE ID=""" + inputID)
@@ -378,16 +393,16 @@ def main():
                     elif adminSelect == 1:
                         # add course
                         admin_add_course()
-                        print()
                     elif adminSelect == 2:
                         # remove course
                         admin_remove_course()
-                        print()
                     elif adminSelect == 3:
                         # add/remove users
+                        ######################## ADD HERE
                         print()
                     elif adminSelect == 4:
                         # override
+                        ######################## ADD HERE
                         print()
                     elif adminSelect == 5:
                         # search
