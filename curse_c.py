@@ -2,6 +2,11 @@
 # curse_c.py
 # classes for CURSE project
 #####################################
+# database set up
+import sqlite3
+db = sqlite3.connect("assignment7.db")
+cursor = db.cursor()
+
 
 # User base class
 class User:
@@ -30,6 +35,7 @@ class Student(User):
     gradYear = 0
     major = ""
     email = ""
+    schedule = []
 
     # constructor
     def __init__(self, f, l, i, g, m, e):
@@ -37,32 +43,52 @@ class Student(User):
         self.gradYear = g
         self.major = m
         self.email = e
+        self.schedule = []
+
 
     # printing method using __str__ and __repr__
     def __str__(self):
         return str('Name: ' + self.firstName + ', ' + self.lastName + '.    ID: ' + str(self.ID))
 
+
     def __repr__(self):
         return str('Name: ' + self.firstName + ', ' + self.lastName + '.    ID: ' + str(self.ID))
+
 
     def get_ID(self):
         return self.ID
 
+
+    def add_course(self, crn):
+        cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (crn))
+        query_result = cursor.fetchall()
+        for i in query_result:
+            self.schedule.append(i)
+        return
+
+
+    def remove_course(self, crn):
+        cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (crn))
+        query_result = cursor.fetchall()
+        for i in query_result:
+            for c in self.schedule:
+                if(i == c):
+                    print("removing " + str(i))
+                    self.schedule.remove(c)
+        return
+
+
     def set_schedule(self, x, y, z):
-        schedule = []
-        cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (x))
-        query_result = cursor.fetchall()
-        for i in query_result:
-            schedule.append(i)
-        cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (y))
-        query_result = cursor.fetchall()
-        for i in query_result:
-            schedule.append(i)        
-        cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (z))
-        query_result = cursor.fetchall()
-        for i in query_result:
-            schedule.append(i)    
-            return schedule     
+        self.add_course(x)
+        self.add_course(y)
+        self.add_course(z)
+        return
+
+    def print_schedule(self):
+        for i in self.schedule:
+            print(i)
+        return
+
 
 # Instructor:
 class Instructor(User):
