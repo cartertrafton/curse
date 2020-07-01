@@ -66,9 +66,10 @@ class Student(User):
         return
 
     def remove_course(self, crn):
-        for c in self.schedule:
-            if(c == crn):
-                self.schedule.remove(c)
+        cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (crn))
+        query_result = cursor.fetchall()
+        for i in query_result:
+                self.schedule.remove(i)
         return
 
     def set_schedule(self, x, y, z,):
@@ -78,12 +79,9 @@ class Student(User):
         return
 
     def print_schedule(self):
-        print("ID, TITLE, CRN, DEPT, INSTRUCTORID, TIME, DAYS, SEMESTER, YEAR, CREDITS")
+        print("(ID, TITLE, CRN, DEPT, INSTRUCTORID, TIME, DAYS, SEMESTER, YEAR, CREDITS)")
         for i in self.schedule:
-            cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (i))
-            query_result = cursor.fetchall()
-            for x in query_result:
-                print(str(x))
+            print(i)
         return
 
 
