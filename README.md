@@ -7,6 +7,8 @@ Built for Prof. Carpenter's ***Applied Programming Concepts*** Course for WIT Su
 - ``curse.py`` - Main program to run, includes UI and ```main()``` loop.
 - ``curse_c.py`` - File containing class definitions.
 - ``curse_db.py`` - File containing database queries to run to set up.
+- ``assignment7.db`` - Database file used to hold tables.
+- ``/process_models/`` - Folder containing modeling diagrams.
 
 #### Flowchart
 ![flowchart](https://github.com/cartertrafton/curse/blob/master/process_models/flowchart.png?raw=true)
