@@ -9,6 +9,8 @@ Built for Prof. Carpenter's ***Applied Programming Concepts*** Course for WIT Su
 - ``curse_db.py`` - File containing database queries to run to set up.
 - ``assignment7.db`` - Database file used to hold tables.
 - ``/process_models/`` - Folder containing modeling diagrams.
+- ``/tests/`` - Folder containing test code and files
+
 
 #### Flowchart
 ![flowchart](https://github.com/cartertrafton/curse/blob/master/process_models/flowchart.png?raw=true)
