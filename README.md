@@ -35,8 +35,8 @@ Built for Prof. Carpenter's ***Applied Programming Concepts*** Course for WIT Su
    - Admin:
         - [x] Add courses to the system
         - [x] Remove courses from the system
-        - [ ] Add instructor/students
-        - [ ] Link (or unlink) instructor/student to course 
+        - [x] Add instructor/students
+        - [x] Link (or unlink) instructor/student to course 
 
 ## Authors
 

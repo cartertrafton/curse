@@ -121,6 +121,17 @@ class Instructor(User):
             print(i)
         return
 
+    def link_course(self, course_ID):
+        self.courses.append(course_ID)
+        cursor.execute("""UPDATE COURSE SET INSTRUCTORID=%s WHERE ID=%s""" % (self.ID, course_ID))
+        return
+
+    def unlink_course(self, course_ID):
+        for c in self.courses:
+            if c == course_ID:
+                self.courses.remove(c)
+                cursor.execute("""UPDATE COURSE SET INSTRUCTORID=0 WHERE ID=""" + str(course_ID))
+        return
 
 #  Admin:
 class Admin(User):

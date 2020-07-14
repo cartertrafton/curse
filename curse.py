@@ -147,25 +147,6 @@ def instructor_print_roster(user, student_list):
         for x in s.instructors:
             if str(user.ID) == str(x):
                 print(s)
-
-    # s = str(input("Enter Semester (FALL, SPRING, OR SUMMER):"))
-    # print("===========================================")
-    # print("Courses this semester:")
-    # print("ID, TITLE, CRN, DEPT, INSTRUCTORID, TIME, DAYS, SEMESTER, YEAR, CREDITS")
-    # print("===========================================")
-    # cursor.execute("""SELECT * FROM COURSE WHERE SEMESTER = '%s'""" % (s))
-    # query_result = cursor.fetchall()
-    # for i in query_result:
-    #     print(i)
-    # print("===========================================")
-    # temp = input("Enter CRN to print class roster:")
-    # cursor.execute("""SELECT * FROM COURSE WHERE CRN = '%s'""" % (temp))
-    # query_result = cursor.fetchall()
-    # out = any(check in schedule for check in query_result)
-    # if out:
-    #     print("True")
-    # else :
-    #     print("False")
     return
 
 
@@ -190,63 +171,105 @@ def add_remove_user():
     print("===========================================")
     user_type_choice = int(input())
     if user_type_choice == 1:
-        user_type = "Student"
-        # in_ID = str(input(""))
-        # in_name = str(input("ID of Course:"))
-        # in_ = str(input())
-        # in_ = str(input())
-        # in_ = str(input())
-        # in_ = str(input())
-        # in_ = str(input())
-        # in_ = str(input())
-        # in_ = str(input("Course Year:"))
-        # in_ = str(input("Amount of credits:"))
-        # cursor.execute("""INSERT INTO STUDENT VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');""" % (Id, title, CRN, dept, In_Id, time, days, semester, year, credit))
-        # cursor.execute("""INSERT INTO STUDENT VALUES(00010012, 'John', 'Locke', 1960, 'BSEE', 'lockej');""")
-        """
-        student
-            ID 		INT 	PRIMARY KEY 	NOT NULL,
-            NAME		TEXT	NOT NULL,
-            SURNAME		TEXT 	NOT NULL,
-            GRADYEAR	INT 	NOT NULL,
-            MAJOR		CHAR(4) NOT NULL,
-            EMAIL		text	NOT NULL)
-        """
+        user_type = "STUDENT"
     elif user_type_choice == 2:
-        user_type = "Instructor"
-        # cursor.execute("""INSERT INTO STUDENT VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');""" % (Id, title, CRN, dept, In_Id, time, days, semester, year, credit))
-        # cursor.execute("""INSERT INTO INSTRUCTOR VALUES(00020006, 'Daniel', 'Bernoulli', 'Associate Prof.', 1760, 'BSME', 'bernoullid');""")
-        """
-            # Create INSTRUCTOR table in the database
-        INSTRUCTOR (  
-            ID 		INT 	PRIMARY KEY 	NOT NULL,
-            NAME		TEXT	NOT NULL,
-            SURNAME		TEXT 	NOT NULL,
-            TITLE		TEXT 	NOT NULL,
-            HIREYEAR	INT 	NOT NULL,
-            DEPT		CHAR(4) NOT NULL,
-            EMAIL		text	NOT NULL)
-        """
-
-    elif user_type_choice == 2:
-        user_type = "Admin"
-        # cursor.execute("""INSERT INTO ADMIN VALUES(00030001, 'Barack', 'Obama', 'President', 'Dobbs 1600', 'obamab');""")
-        """
-        ADMIN (  
-            ID 		INT 	PRIMARY KEY 	NOT NULL,
-            NAME		TEXT	NOT NULL,
-            SURNAME		TEXT 	NOT NULL,
-            TITLE		TEXT 	NOT NULL,
-            OFFICE		TEXT 	NOT NULL,
-            EMAIL		text	NOT NULL);
-        """
+        user_type = "INSTRUCTOR"
+    elif user_type_choice == 3:
+        user_type = "ADMIN"
     else:
         print("Unrecognized choice...")
         return
+
+    #### formatting SQL commands
+    if add_remove_choice == 2:
+        ID_to_delete = str(input("Enter ID of " + user_type + " to Delete"))
+        sql_command = """DELETE FROM %s WHERE ID='%s';""" % (user_type, ID_to_delete)
+        cursor.execute(sql_command)
+    elif user_type_choice == 1 and add_remove_choice == 1:
+        in_ID = str(input("Enter New Student ID: "))
+        in_name = str(input("Enter New Student First Name: "))
+        in_surname = str(input("Enter New Student Surname: "))
+        in_gradyear = str(input("Enter New Student Grad Year: "))
+        in_major = str(input("Enter New Student Major: "))
+        in_email = str(input("Enter New Student Email: "))
+        cursor.execute("""INSERT INTO STUDENT VALUES(%s, '%s', '%s', %s, '%s', '%s');""" % (in_ID, in_name, in_surname, in_gradyear, in_major, in_email))
+    elif user_type_choice == 2 and add_remove_choice == 1:
+        in_ID = str(input(""))
+        in_name = str(input("ID of Course:"))
+        in_surname = str(input())
+        in_title = str(input())
+        in_hireyear = str(input())
+        in_dept = str(input())
+        in_email = str(input())
+        cursor.execute("""INSERT INTO INSTRUCTOR VALUES(%s, '%s', '%s', '%s', %s, '%s', '%s');""" % (in_ID, in_name, in_surname, in_title, in_hireyear, in_dept, in_email))
+    elif user_type_choice == 3 and add_remove_choice == 1:
+        in_ID = str(input(""))
+        in_name = str(input("ID of Course:"))
+        in_surname = str(input())
+        in_title = str(input())
+        in_office = str(input())
+        in_email = str(input())
+        cursor.execute("""INSERT INTO ADMIN VALUES(%s, '%s', '%s', '%s', '%s', '%s');""" % (in_ID, in_name, in_surname, in_title, in_office, in_email))
+
     print("===========================================")
     print("User Added")
     print("===========================================\n\n")
     return
+
+
+# link and unlink user to course
+def link_unlink(student_list, instructor_list):
+    print("===========================================")
+    print(" [ 1 ] to Link User")
+    print(" [ 2 ] to Unlink User")
+    print("===========================================")
+    link_choice = int(input())
+    if link_choice == 1:
+        cmd = "Link"
+    elif link_choice == 2:
+        cmd = "Unlink"
+    else:
+        print("Unrecognized choice...")
+        return
+    print("===========================================")
+    print(" [ 1 ] to " + cmd + " Student to Course")
+    print(" [ 2 ] to " + cmd + " Instructor to Course")
+    print("===========================================")
+    user_type_choice = int(input())
+    if user_type_choice == 1:
+        user_type = "STUDENT"
+    elif user_type_choice == 2:
+        user_type = "INSTRUCTOR"
+    else:
+        print("Unrecognized choice...")
+        return
+
+    #### update student schedule or instructor roster
+    user_to_update = int(input("Enter " + user_type + " ID to " + cmd + " : "))
+    course_to_update = int(input("Enter Course ID to " + cmd + " : "))
+    # student link
+    if user_type_choice == 1 and link_choice == 1:
+        for s in student_list:
+            if s.ID == user_to_update:
+                s.add_course(course_to_update)
+    # student unlink
+    elif user_type_choice == 1 and link_choice == 2:
+        for s in student_list:
+            if s.ID == user_to_update:
+                s.remove_course(course_to_update)
+    # instructor link
+    elif user_type_choice == 2 and link_choice == 1:
+        for i in instructor_list:
+            if i.ID == user_to_update:
+                i.link_course(course_to_update)
+    # instructor unlink
+    elif user_type_choice == 2 and link_choice == 2:
+        for i in instructor_list:
+            if i.ID == user_to_update:
+                i.unlink_course(course_to_update)
+
+    return
+
 
 ######################### printing functions
 def mainMenu():
@@ -266,6 +289,7 @@ def studentMenu():
     print(" [ 1 ] to Search Courses")
     print(" [ 2 ] to Add/Drop Courses")
     print(" [ 3 ] to Print Schedule")
+    print(" [ 4 ] to Check Course Conflicts")
     print(" [ 0 ] to Log Out")
     print("===========================================")
     studentSelect = int(input())
@@ -290,7 +314,7 @@ def adminMenu():
     print(" [ 1 ] to to Add Course to System")
     print(" [ 2 ] to Remove Course from System")
     print(" [ 3 ] to Add/Remove Users")
-    print(" [ 4 ] to Override Student In/Out of Course or Roster")
+    print(" [ 4 ] to Link/Unlink User to Course")
     print(" [ 5 ] to Search Courses")
     print(" [ 0 ] to Log Out")
     print("===========================================")
@@ -304,18 +328,25 @@ def main():
     student1 = Student("John", "Locke", 10012, 1960, "BSEE", "lockej")
     student1.set_schedule(48155, 48152, 48151)
     student1.instructors = [20002, 20006, 20003]
-
     student2 = Student("Ada", "Lovelace", 10010, 1832, "BCOS", "lovelacea")
     student2.set_schedule(48155, 48153, 48151)
     student2.instructors = [20002, 20004,  20003]
-
     student3 = Student("Scott", "Pilgrim", 10011, 1980, "BSCO", "pilgrims")
     student3.set_schedule(48155, 48152, 48153)
     student3.instructors = [20002, 20006, 20004]
 
+    instructor1 = Instructor('Galileo', 'Galilei', 20003, 'Full Prof.', 1600, 'BSAS', 'galileig')
+    instructor1.link_course(90000)
+    instructor2 = Instructor('Alan', 'Turing', 20004, 'Associate Prof.', 1940, 'BCOS', 'turinga')
+    instructor2.link_course(90002)
+    instructor3 = Instructor('Nelson', 'Mandela', 20002, 'Full Prof.', 1994, 'HUSS', 'mandelan')
+    instructor3.link_course(90004)
+
 
     # add example students to a list
     student_list = [student1, student2, student3]
+    instructor_list = [instructor1, instructor2, instructor3]
+
 
     active = 1
 
@@ -371,10 +402,13 @@ def main():
                     elif studentSelect == 2:
                         # add/drop
                         student_add_drop(currentUser)
-                        print()
                     elif studentSelect == 3:
                         # print schedule
                         currentUser.print_schedule()
+                    elif studentSelect == 4:
+                        # check conflict
+                        #### check conflicts
+                        print()
                     else:
                         print("Unrecognized selection!")
             else:
@@ -420,7 +454,6 @@ def main():
                     elif instructorSelect == 1:
                         # print schedule
                         currentUser.print_schdule()
-                        print()
                     elif instructorSelect == 2:
                         # print roster
                         instructor_print_roster(currentUser, student_list)
@@ -477,11 +510,9 @@ def main():
                     elif adminSelect == 3:
                         # add/remove users
                         add_remove_user()
-                        print()
                     elif adminSelect == 4:
                         # override
-                        ######################## ADD HERE
-                        print()
+                        link_unlink(student_list, instructor_list)
                     elif adminSelect == 5:
                         # search
                         searchCoursesMenu()
