@@ -166,9 +166,87 @@ def instructor_print_roster(user, student_list):
     #     print("True")
     # else :
     #     print("False")
-
     return
 
+
+# add/remove users
+def add_remove_user():
+    print("===========================================")
+    print(" [ 1 ] to Add User")
+    print(" [ 2 ] to Remove User")
+    print("===========================================")
+    add_remove_choice = int(input())
+    if add_remove_choice == 1:
+        cmd = "Add"
+    elif add_remove_choice == 2:
+        cmd = "Remove"
+    else:
+        print("Unrecognized choice...")
+        return
+    print("===========================================")
+    print(" [ 1 ] to " + cmd + " Student")
+    print(" [ 2 ] to " + cmd + " Instructor")
+    print(" [ 3 ] to " + cmd + " Admin")
+    print("===========================================")
+    user_type_choice = int(input())
+    if user_type_choice == 1:
+        user_type = "Student"
+        # in_ID = str(input(""))
+        # in_name = str(input("ID of Course:"))
+        # in_ = str(input())
+        # in_ = str(input())
+        # in_ = str(input())
+        # in_ = str(input())
+        # in_ = str(input())
+        # in_ = str(input())
+        # in_ = str(input("Course Year:"))
+        # in_ = str(input("Amount of credits:"))
+        # cursor.execute("""INSERT INTO STUDENT VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');""" % (Id, title, CRN, dept, In_Id, time, days, semester, year, credit))
+        # cursor.execute("""INSERT INTO STUDENT VALUES(00010012, 'John', 'Locke', 1960, 'BSEE', 'lockej');""")
+        """
+        student
+            ID 		INT 	PRIMARY KEY 	NOT NULL,
+            NAME		TEXT	NOT NULL,
+            SURNAME		TEXT 	NOT NULL,
+            GRADYEAR	INT 	NOT NULL,
+            MAJOR		CHAR(4) NOT NULL,
+            EMAIL		text	NOT NULL)
+        """
+    elif user_type_choice == 2:
+        user_type = "Instructor"
+        # cursor.execute("""INSERT INTO STUDENT VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');""" % (Id, title, CRN, dept, In_Id, time, days, semester, year, credit))
+        # cursor.execute("""INSERT INTO INSTRUCTOR VALUES(00020006, 'Daniel', 'Bernoulli', 'Associate Prof.', 1760, 'BSME', 'bernoullid');""")
+        """
+            # Create INSTRUCTOR table in the database
+        INSTRUCTOR (  
+            ID 		INT 	PRIMARY KEY 	NOT NULL,
+            NAME		TEXT	NOT NULL,
+            SURNAME		TEXT 	NOT NULL,
+            TITLE		TEXT 	NOT NULL,
+            HIREYEAR	INT 	NOT NULL,
+            DEPT		CHAR(4) NOT NULL,
+            EMAIL		text	NOT NULL)
+        """
+
+    elif user_type_choice == 2:
+        user_type = "Admin"
+        # cursor.execute("""INSERT INTO ADMIN VALUES(00030001, 'Barack', 'Obama', 'President', 'Dobbs 1600', 'obamab');""")
+        """
+        ADMIN (  
+            ID 		INT 	PRIMARY KEY 	NOT NULL,
+            NAME		TEXT	NOT NULL,
+            SURNAME		TEXT 	NOT NULL,
+            TITLE		TEXT 	NOT NULL,
+            OFFICE		TEXT 	NOT NULL,
+            EMAIL		text	NOT NULL);
+        """
+    else:
+        print("Unrecognized choice...")
+        return
+    print("===========================================")
+    print("User Added")
+    print("===========================================\n\n")
+    return
 
 ######################### printing functions
 def mainMenu():
@@ -398,7 +476,7 @@ def main():
                         admin_remove_course()
                     elif adminSelect == 3:
                         # add/remove users
-                        ######################## ADD HERE
+                        add_remove_user()
                         print()
                     elif adminSelect == 4:
                         # override
