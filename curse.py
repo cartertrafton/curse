@@ -270,6 +270,35 @@ def link_unlink(student_list, instructor_list):
 
     return
 
+#check for conflic in schedule
+def conflict(currentUser):
+    i = 0
+    while i == 0:
+        temp = str(input("Enter 1 to Check for Conflict or 0 to Exit:"))
+        print("===========================================")
+        if(temp == '1'):
+            s = str(input("Enter Time to check for possible conflict in schedule:"))
+            print("===========================================")
+            cursor.execute("""SELECT * FROM COURSE WHERE TIME = '%s'""" % (s))
+            query_result = cursor.fetchall()
+    
+            if(len(query_result) == 1):
+                print("No Conflict at that Time")
+                
+            if(len(query_result) >= 2):
+                out = all(check in currentUser.schedule for check in query_result)
+                if out:
+                    print("===========================================")
+                    print("Possible Conflict in Schedule for the following classes:")
+                    for i in query_result:
+                        print(i)
+                    
+                else :
+                    print("No Conflict at that Time")
+                    print("===========================================")
+            i = 0
+        if(temp == '0'):
+            i = 1
 
 ######################### printing functions
 def mainMenu():
@@ -407,8 +436,7 @@ def main():
                         currentUser.print_schedule()
                     elif studentSelect == 4:
                         # check conflict
-                        #### check conflicts
-                        print()
+                        conflict(currentUser)
                     else:
                         print("Unrecognized selection!")
             else:
