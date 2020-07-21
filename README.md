@@ -27,7 +27,7 @@ Built for Prof. Carpenter's ***Applied Programming Concepts*** Course for WIT Su
         - [x] Search for courses (all or based on some parameter)
    - Student:
         - [x] Add/remove course from semester schedule (based on course ID number)
-        - [ ] Check conflicts in course schedule
+        - [x] Check conflicts in course schedule
         - [x] Print individual schedule
    - Instructor:
         - [x] Print course teaching schedule
