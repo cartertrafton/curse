@@ -194,23 +194,23 @@ def add_remove_user():
         in_email = str(input("Enter New Student Email: "))
         cursor.execute("""INSERT INTO STUDENT VALUES(%s, '%s', '%s', %s, '%s', '%s');""" % (in_ID, in_name, in_surname, in_gradyear, in_major, in_email))
     elif user_type_choice == 2 and add_remove_choice == 1:
-        in_ID = str(input(""))
-        in_name = str(input("ID of Course:"))
-        in_surname = str(input())
-        in_title = str(input())
-        in_hireyear = str(input())
-        in_dept = str(input())
-        in_email = str(input())
+        in_ID = str(input("Enter New Employee ID: "))
+        in_name = str(input("Enter New Employee First Name: "))
+        in_surname = str(input("Enter New Employee Surname: "))
+        in_title = str(input("Enter New Employee Title: "))
+        in_hireyear = str(input("Enter New Employee Hire Year: "))
+        in_dept = str(input("Enter New Employee Dept: "))
+        in_email = str(input("Enter New Employee Email: "))
         cursor.execute("""INSERT INTO INSTRUCTOR VALUES(%s, '%s', '%s', '%s', %s, '%s', '%s');""" % (in_ID, in_name, in_surname, in_title, in_hireyear, in_dept, in_email))
     elif user_type_choice == 3 and add_remove_choice == 1:
-        in_ID = str(input(""))
-        in_name = str(input("ID of Course:"))
-        in_surname = str(input())
-        in_title = str(input())
-        in_office = str(input())
-        in_email = str(input())
+        in_ID = str(input("Enter New Employee ID: "))
+        in_name = str(input("Enter New Employee First Name: "))
+        in_surname = str(input("Enter New Employee Surname: "))
+        in_title = str(input("Enter New Employee Title: "))
+        in_office = str(input("Enter New Employee Office: "))
+        in_email = str(input("Enter New Employee Email: "))
         cursor.execute("""INSERT INTO ADMIN VALUES(%s, '%s', '%s', '%s', '%s', '%s');""" % (in_ID, in_name, in_surname, in_title, in_office, in_email))
-
+    db.commit()
     print("===========================================")
     print("User Added")
     print("===========================================\n\n")
@@ -382,6 +382,7 @@ def main():
     while active == 1:
         # prompt user for log in input
         select = mainMenu()
+
 
         # exit program
         if select == 0:
