@@ -124,6 +124,7 @@ class Instructor(User):
     def link_course(self, course_ID):
         self.courses.append(course_ID)
         cursor.execute("""UPDATE COURSE SET INSTRUCTORID=%s WHERE ID=%s""" % (self.ID, course_ID))
+        db.commit()
         return
 
     def unlink_course(self, course_ID):
@@ -131,6 +132,7 @@ class Instructor(User):
             if c == course_ID:
                 self.courses.remove(c)
                 cursor.execute("""UPDATE COURSE SET INSTRUCTORID=0 WHERE ID=""" + str(course_ID))
+                db.commit()
         return
 
 #  Admin:

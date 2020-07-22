@@ -128,12 +128,14 @@ def admin_add_course():
     print("===========================================")
     print("Course Added")
     cursor.execute("""INSERT INTO COURSE VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');""" % (Id, title, CRN, dept, In_Id, time, days, semester, year, credit))
+    db.commit()
     return
 
 # remove course from system
 def admin_remove_course():
     temp = input("Enter CRN to remove course:")
     cursor.execute("""DELETE FROM COURSE WHERE CRN = '%s';""" % (temp))
+    db.commit()
     print("===========================================")
     print("Course removed")
     return
@@ -194,23 +196,23 @@ def add_remove_user():
         in_email = str(input("Enter New Student Email: "))
         cursor.execute("""INSERT INTO STUDENT VALUES(%s, '%s', '%s', %s, '%s', '%s');""" % (in_ID, in_name, in_surname, in_gradyear, in_major, in_email))
     elif user_type_choice == 2 and add_remove_choice == 1:
-        in_ID = str(input(""))
-        in_name = str(input("ID of Course:"))
-        in_surname = str(input())
-        in_title = str(input())
-        in_hireyear = str(input())
-        in_dept = str(input())
-        in_email = str(input())
+        in_ID = str(input("Enter New Employee ID: "))
+        in_name = str(input("Enter New Employee First Name: "))
+        in_surname = str(input("Enter New Employee Surname: "))
+        in_title = str(input("Enter New Employee Title: "))
+        in_hireyear = str(input("Enter New Employee Hire Year: "))
+        in_dept = str(input("Enter New Employee Dept: "))
+        in_email = str(input("Enter New Employee Email: "))
         cursor.execute("""INSERT INTO INSTRUCTOR VALUES(%s, '%s', '%s', '%s', %s, '%s', '%s');""" % (in_ID, in_name, in_surname, in_title, in_hireyear, in_dept, in_email))
     elif user_type_choice == 3 and add_remove_choice == 1:
-        in_ID = str(input(""))
-        in_name = str(input("ID of Course:"))
-        in_surname = str(input())
-        in_title = str(input())
-        in_office = str(input())
-        in_email = str(input())
+        in_ID = str(input("Enter New Employee ID: "))
+        in_name = str(input("Enter New Employee First Name: "))
+        in_surname = str(input("Enter New Employee Surname: "))
+        in_title = str(input("Enter New Employee Title: "))
+        in_office = str(input("Enter New Employee Office: "))
+        in_email = str(input("Enter New Employee Email: "))
         cursor.execute("""INSERT INTO ADMIN VALUES(%s, '%s', '%s', '%s', '%s', '%s');""" % (in_ID, in_name, in_surname, in_title, in_office, in_email))
-
+    db.commit()
     print("===========================================")
     print("User Added")
     print("===========================================\n\n")
@@ -252,24 +254,61 @@ def link_unlink(student_list, instructor_list):
         for s in student_list:
             if s.ID == user_to_update:
                 s.add_course(course_to_update)
+                print("Course Linked")
+                print("===========================================\n\n")
     # student unlink
     elif user_type_choice == 1 and link_choice == 2:
         for s in student_list:
             if s.ID == user_to_update:
                 s.remove_course(course_to_update)
+                print("Course Unlinked")
+                print("===========================================\n\n")
     # instructor link
     elif user_type_choice == 2 and link_choice == 1:
         for i in instructor_list:
             if i.ID == user_to_update:
                 i.link_course(course_to_update)
+                print("Course Linked")
+                print("===========================================\n\n")
     # instructor unlink
     elif user_type_choice == 2 and link_choice == 2:
         for i in instructor_list:
             if i.ID == user_to_update:
                 i.unlink_course(course_to_update)
+                print("Course Unlinked")
+                print("===========================================\n\n")
 
     return
 
+#check for conflic in schedule
+def conflict(currentUser):
+    i = 0
+    while i == 0:
+        temp = str(input("Enter 1 to Check for Conflict or 0 to Exit:"))
+        print("===========================================")
+        if(temp == '1'):
+            s = str(input("Enter Time to check for possible conflict in schedule:"))
+            print("===========================================")
+            cursor.execute("""SELECT * FROM COURSE WHERE TIME = '%s'""" % (s))
+            query_result = cursor.fetchall()
+    
+            if(len(query_result) == 1):
+                print("No Conflict at that Time")
+                
+            if(len(query_result) >= 2):
+                out = all(check in currentUser.schedule for check in query_result)
+                if out:
+                    print("===========================================")
+                    print("Possible Conflict in Schedule for the following classes:")
+                    for i in query_result:
+                        print(i)
+                    
+                else :
+                    print("No Conflict at that Time")
+                    print("===========================================")
+            i = 0
+        if(temp == '0'):
+            i = 1
 
 ######################### printing functions
 def mainMenu():
@@ -358,6 +397,7 @@ def main():
         if select == 0:
             active = 0
             print("Exiting...")
+            db.close()
             break
 
         # STUDENT LOGIN
@@ -385,7 +425,6 @@ def main():
                 sMajor = str(cursor.fetchall())[2:-2].replace(",", "")
                 cursor.execute("""SELECT EMAIL FROM STUDENT WHERE ID=""" + inputID)
                 sEmail = str(cursor.fetchall())[2:-2].replace(",", "")
-
                 # create current user object
                 currentUser = Student(sName, sSurname, sID, sGradyear, sMajor, sEmail)
                 print("Welcome, " + currentUser.firstName.replace("'", "") + " " + currentUser.lastName.replace("'", ""))
@@ -407,8 +446,7 @@ def main():
                         currentUser.print_schedule()
                     elif studentSelect == 4:
                         # check conflict
-                        #### check conflicts
-                        print()
+                        conflict(currentUser)
                     else:
                         print("Unrecognized selection!")
             else:
